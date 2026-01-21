@@ -1,0 +1,24 @@
+name: stateprep
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - ipykernel=6.17.1=pyh736e0ef_0
+  - matplotlib=3.10.7=py312h1f38498_0
+  - matplotlib-base=3.10.7=py312h605b88b_0
+  - matplotlib-inline=0.2.1=pyhd8ed1ab_0
+  - numpy=1.26.4=py312h8442bc7_0
+  - pip=25.1.1=pyh8b19718_0
+  - qiskit=2.2.3=py310h06fc29a_0
+  - qiskit-aer=0.17.2=cpu_py312hdef44fe_201
+  - scipy=1.16.2=py312ha6bbf71_0
+  - sympy=1.14.0=pyh04b8f61_5
+  - pip:
+      - pytket==2.6.0
+      - pytket-qir==0.24.1
+      - pytket-qiskit==0.68.2
+      - pytket-quantinuum==0.48.0
+      - qiskit-qasm3-import==0.6.0
+      - qnexus==0.20.0
+      - quantinuum-schemas==3.2.3
+# prefix: /Users/melod/anaconda3/envs/wstate
