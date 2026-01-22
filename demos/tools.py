@@ -60,9 +60,10 @@ def get_2d_gaussian_coeff(lx, ly, k0, x0, sigma, epsilon=0.0):
 	c = c / np.linalg.norm(c)
 
 	# Drop small values less than cutoff
-	mask = np.abs(c) ** 2 > epsilon 	# bit mask for all |c_n| < epsilon
-	c = c * mask 						# apply bit mask
-	c = c/np.sqrt(np.vdot(c, c))		# renormalize
+	mask = np.abs(c) ** 2 > epsilon 	# Bit mask for all |c_n| < epsilon
+	c = c * mask 						# Apply bit mask
+	c = c/np.sqrt(np.vdot(c, c))		# Renormalize
+
 	return c
 	
 
@@ -81,14 +82,16 @@ def get_unitary_thetas(N, c=None, tol=None):
 	"""
 	# sympy
 	if c is None:
-		c = np.full(N, 1 / np.sqrt(N))
+		c = np.full(N, 1 / np.sqrt(N)) # default to the W state
 	
 	if tol is None:
 		tol = 1e-6
 
+	# Solve linear system of equations for Ry coefficients
+	# Define the variables in sympy
 	ry_theta = [Symbol(f't{i}') for i in range(0, N-1)]
 
-	# construct \Theta
+	# Construct \Theta
 	big_theta = np.ones((N, N), dtype=object)
 
 	for n in range(N):
@@ -105,7 +108,7 @@ def get_unitary_thetas(N, c=None, tol=None):
 
 	equation_sys = []
 
-	# obtain list of equations
+	# Obtain list of equations
 	for i in range(len(big_theta)):
 		# prod
 		row = big_theta[i]
@@ -114,14 +117,13 @@ def get_unitary_thetas(N, c=None, tol=None):
 			equation *= exp
 
 		equation = Eq(equation, Float(c[i]))
-		# add to list of equations
 		equation_sys.append(equation)
 
-	guess = np.ones(N-1) # something arbitrary
-	sol = nsolve(equation_sys, ry_theta, guess, tol=tol)
-	sol = np.array(sol, dtype=float).T[0] # reshape
+	guess = np.ones(N-1) # Define an arbitrary guess
+	thetas = nsolve(equation_sys, ry_theta, guess, tol=tol)
+	thetas = np.array(thetas, dtype=float).T[0] # Reshape to fit expected type
 
-	return sol
+	return thetas
 
 def fused_log_subcircuit_pytket(N, c=None):
 	""" 
@@ -141,9 +143,8 @@ def fused_log_subcircuit_pytket(N, c=None):
 
 	qc.X(qr[0])
 
-	# log scaling: the following code is from Roland
 	for i in range(int(np.ceil(np.log2(N)))):
-		# circuits that can run in parallel
+		# These can be arranged to run in parallel
 		for j in range(2**i):
 			if j + 2**i < N:
 				qc.CRy(thetas[j + 2**i - 1] / np.pi, qr[j], qr[j + 2**i])
