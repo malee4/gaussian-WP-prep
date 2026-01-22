@@ -70,10 +70,11 @@ def get_unitary_thetas(N, c=None, tol=None):
 	""" 
 	Calculates the CRy rotations for a log-scaling unitary circuit for state preparation on 
 	a device with all-to-all connectivity.
+	For complex coefficients, an additional step using $R_Z$ gates in the circuit must be performed.
 
 	args:
 		N (int):		wavepacket size
-		c (np.ndarray):	expected coefficients. If None is passed, the uniform probability distribution is assumed.
+		c (np.ndarray):	expected real coefficients. If None is passed, the uniform probability distribution is assumed.
 	
 	returns:
 		thetas (np.ndarray): array of CRy rotations, where each index corresponds to its order in the circuit.		
